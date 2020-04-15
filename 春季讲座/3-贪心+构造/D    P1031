@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+const int max_size = 100 + 5;
+int main()
+{
+    int a[max_size];
+    int n, sum = 0;
+    cin >> n;
+    for(int i = 0; i < n; ++i)
+    {
+        cin >> a[i];
+        sum += a[i];
+    }
+    int avg = sum / n, ans = 0;
+    //思路是考虑当前堆是否要调整，无论多出来还是缺少，让下一堆来处理
+    for(int i = 0; i < n - 1; ++i)
+    {
+        a[i] -= avg;
+        if(a[i])
+        {    
+            a[i + 1] += a[i];
+            ans++;
+        }
+    }
+    cout << ans;
+    return 0;
+}
