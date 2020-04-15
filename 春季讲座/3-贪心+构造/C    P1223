@@ -1,0 +1,37 @@
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
+using namespace std;
+const int max_size = 1000 + 5;
+typedef struct p{
+    int num, time;
+};
+bool cmp(const p a, const p b)
+{
+    return a.time < b.time;
+}
+int main()
+{
+    p a[max_size];
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> a[i].time;
+        a[i].num = i + 1;
+    }
+    sort(a, a + n, cmp);
+    double average = 0;
+    for(int i = 0; i < n; ++i)
+    {
+    //注意这里的等待时间是指如果第i个人正在打水，那么后面 n-i 个人就要等待第 i 个人打水的时间，所以最快的在前
+        average += a[i].time * (n - i - 1);
+        cout << a[i].num;
+        if(i + 1 < n)
+            cout << " ";
+        else
+            cout << endl;
+    }
+    cout << fixed << setprecision(2) << average / n;
+    return 0;
+}
