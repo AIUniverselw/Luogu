@@ -1,0 +1,22 @@
+
+    //因为要求连续，所以无需排序，贪心水题，注意最后一段有坑
+    int n, m, t, sum = 0, ans = 0;
+    cin >> n >> m;
+    for(int i = 0; i < n; ++i)
+    {
+        cin >> t;
+        if(sum + t < m)
+            sum += t;
+        else
+        {
+            ans++;
+            if(sum + t == m)
+                sum = 0;
+            else
+                sum = t;
+        }
+    }
+    //坑:最后一段如果sum < m的话，ans没有加一
+    if(sum)
+        ans++;
+    cout << ans;
