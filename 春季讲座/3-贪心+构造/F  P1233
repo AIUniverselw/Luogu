@@ -1,0 +1,78 @@
+//#include <iostream>
+//#include <algorithm>
+#include <bits/stdc++.h>
+//万能头文件,包含遇到的所有有文件,最明显的问题就是编译时间太长。
+//另外，<bits/stdc++.h>不是c++的标准头文件，所以有部分编译器不支持
+using namespace std;
+const int max_size = 20000 + 5;
+typedef struct Stick{
+	int l, w;
+}S;
+bool cmp(const S a, const S b)
+{
+	if(a.l == b.l)
+		return a.w > b.w;
+	return a.l > b.l; 
+}
+int main()
+{
+	//贪心 + dp 
+	//dilworth定理：对于给定的一系列数	子序列可以理解为子集 
+	//最长不上升子序列的个数等于最长上升子序列的长度 
+	S a[max_size];
+	int n;
+	cin >> n;
+	for(int i = 0; i < n; ++i)
+		cin >> a[i].l >> a[i].w;
+	sort(a, a + n, cmp);
+	//如何实现最长上升子序列长度的求解？ 
+	//贪心	循环，每次把比当前长度小的标记掉，最后剩余未标记的数量就是答案 
+	int used[max_size] = {0}, t, cnt = 0;
+	for(int i = 0; i < n; ++i)
+		if(!used[i])	//没被处理过 
+		{
+			t = a[i].w;	//t记录当前长度，小于t的被标记掉 
+			for(int j = i + 1; j < n; ++j)
+				if(!used[j] && a[j].w <= t)
+				{
+					used[j] = 1;
+					t = a[j].w;
+					++cnt;
+				}
+		}
+	cout << n - cnt;
+	
+	//dp不太懂，先附上题解代码 
+/*	
+	# include <bits/stdc++.h>
+	using namespace std;
+	# define maxN 50005
+	struct Stick {
+    	int l, w;
+	}stick[maxN];
+	// 首先定义一个名字为 Stick 的结构体，存放木棍的长度和宽度.
+	int n, dp[maxN];
+	// 然后定义木棍的数量 n 和 dp 数组.
+	bool cmp(Stick, Stick);
+	// 这是排序函数.
+	int main() 
+	{
+	    cin >> n;
+	    for(int i = 1; i <= n; ++i) cin >> stick[i].l >> stick[i].w;
+	    sort(stick + 1, stick + 1 + n, cmp);
+	    // 输入数据，排序.
+	    dp[1] = stick[1].w;
+	    // dp 数组的初始化.
+	    int k = 1; // 答案最小也为 1.
+	    for(int i = 2, j; i <= n; ++i) j = lower_bound(dp + 1, dp + k + 1, stick[i].w) - dp, j <= k ? dp[j] = stick[i].w : dp[++k] = stick[i].w;
+	    //跑一遍最长上升子序列.
+	    cout << k << '\n', exit(0);
+	    // 输出答案.
+	}
+	bool cmp(Stick a, Stick b) {
+	    if(a.l != b.l) return a.l > b.l; // 如果两根木棍的长度不等，那么按木棍的长度从大到小排序.
+	    return a.w > b.w; // 否则按木棍的宽度从大到小排序.
+	}
+*/	
+	return 0;
+}
